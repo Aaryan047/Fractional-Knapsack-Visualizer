@@ -398,7 +398,7 @@ def apply_custom_css(theme: Dict):
             color: {theme["text"]} !important;
         }}
 
-        [data-testid="stMetricLabel"] {{
+        [data-testid="stMetricLabel"] > div {{
             color: {theme["text"]} !important;
             opacity: 1 !important;
         }}
@@ -410,6 +410,7 @@ def apply_custom_css(theme: Dict):
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
+
 
 def process_step_1(items: List[KnapsackItem]) -> List[KnapsackItem]:
     """Calculate ratios and sort items"""

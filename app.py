@@ -211,56 +211,64 @@ def fractional_knapsack(items: List[KnapsackItem], capacity: float) -> Tuple[flo
 
 def create_visualization(items: List[KnapsackItem], capacity: float, total_value: float, theme: Dict):
     """
-    Creates a Plotly bar chart visualization of the knapsack solution
+    Creates a Plotly bar chart visualization of the knapsack solution,
+    showing the percentage taken for ALL items, sorted by ratio.
     """
-    # Prepare data for visualization - only include items that are taken (fully or partially)
-    item_data = [(item, f"Item {item.item_id}") for item in items 
-                 if item.status in ["fully_taken", "partially_taken"]]
     
-    if not item_data:  # If no items are taken
-        return None
-        
-    taken_items, item_ids = zip(*item_data)
+    # --- THIS IS THE FIX ---
+    # 1. We no longer filter. We use all items, already sorted by ratio
+    #    from the 'processed_data'.
     
-    values = [item.value * item.fraction_taken for item in taken_items]  # Show actual value taken
-    weights = [item.weight for item in taken_items]
-    ratios = [item.ratio for item in taken_items]
-    fractions = [item.fraction_taken for item in taken_items]
+    item_ids = [f"Item {item.item_id}" for item in items]
+    percentages = [item.fraction_taken * 100 for item in items] # Y-axis is now percentage
     
-    # Color coding based on status
-    colors = [theme["fully_taken"] if item.status == "fully_taken" 
-             else theme["partially_taken"] for item in taken_items]
+    # 2. Get full item details for hover data
+    values = [item.value for item in items]
+    weights = [item.weight for item in items]
+    ratios = [item.ratio for item in items]
+    
+    # 3. Assign colors based on the *new* logic
+    colors = []
+    for item in items:
+        if item.status == "fully_taken":
+            colors.append(theme["fully_taken"])
+        elif item.status == "partially_taken":
+            colors.append(theme["partially_taken"])
+        else:
+            colors.append(theme["not_taken"]) # Add the "not_taken" color
     
     # Create the bar chart
     fig = go.Figure()
     
-    # Add bars for item values
+    # 4. Add bars, changing Y-axis to percentages
     fig.add_trace(go.Bar(
         x=item_ids,
-        y=values,
-        name="Value Taken",
+        y=percentages, # Y-axis is now percentages
+        name="Percentage Taken",
         marker_color=colors,
-        text=[f"Weight: {w}<br>Ratio: {r:.2f}<br>Taken: {f:.1%}" 
-              for w, r, f in zip(weights, ratios, fractions)],
+        # 5. Update text and hovertemplate for the new Y-axis
+        text=[f"{p:.1f}%" for p in percentages],
         textposition="outside",
         hovertemplate="<b>%{x}</b><br>" +
-                      "Value Taken: %{y:.2f}<br>" +
-                      "Weight: %{customdata[0]}<br>" +
-                      "Ratio: %{customdata[1]:.2f}<br>" +
-                      "Fraction Taken: %{customdata[2]:.1%}<extra></extra>",
-        customdata=list(zip(weights, ratios, fractions))
+                      "Percentage Taken: %{y:.1f}%<br>" +
+                      "Ratio: %{customdata[0]:.2f}<br>" +
+                      "Value: %{customdata[1]:.2f}<br>" +
+                      "Weight: %{customdata[2]}<br>" +
+                      "<extra></extra>",
+        customdata=list(zip(ratios, values, weights))
     ))
     
-    # Update layout with theme colors
+    # 6. Update layout with new titles and theme colors
     fig.update_layout(
         title={
-            'text': f"Fractional Knapsack Solution<br><sub>Total Value: {total_value:.2f} | Capacity: {capacity}</sub>",
+            'text': f"Fractional Knapsack Solution (Sorted by Ratio)<br><sub>Total Value: {total_value:.2f} | Capacity: {capacity}</sub>",
             'x': 0.5,
             'xanchor': 'center',
             'font': {'color': theme["text"], 'size': 20}
         },
-        xaxis_title="Selected Items",
-        yaxis_title="Value Taken",
+        xaxis_title="Items (Sorted by Value/Weight Ratio)",
+        yaxis_title="Percentage Taken (%)", # New Y-axis title
+        yaxis_range=[0, 105], # Set Y-axis to go from 0 to 105 (for padding)
         xaxis={
             'title_font': {'color': theme["text"]}, 
             'tickfont': {'color': theme["text"]},
@@ -278,11 +286,14 @@ def create_visualization(items: List[KnapsackItem], capacity: float, total_value
         font={'color': theme["text"]}
     )
     
-    # Add color legend as annotations
+    # 7. Add the new "Not Taken" category to the legend
     fig.add_annotation(
         x=0.02, y=0.98,
         xref="paper", yref="paper",
-        text="<b>Legend:</b><br>Fully taken<br>Partially taken",
+        text="<b>Legend:</b><br>" +
+             f"<span style='color:{theme['fully_taken']};'>■</span> Fully taken<br>" +
+             f"<span style='color:{theme['partially_taken']};'>■</span> Partially taken<br>" +
+             f"<span style='color:{theme['not_taken']};'>■</span> Not taken",
         showarrow=False,
         bgcolor=theme["legend_bg"],
         bordercolor=theme["grid"],
@@ -292,6 +303,7 @@ def create_visualization(items: List[KnapsackItem], capacity: float, total_value
     )
     
     return fig
+
 
 def apply_custom_css(theme: Dict):
     """Apply custom CSS based on selected theme"""
@@ -384,6 +396,11 @@ def apply_custom_css(theme: Dict):
         /* Radio button */
         .stRadio > label {{
             color: {theme["text"]} !important;
+        }}
+
+        [data-testid="stMetricLabel"] {{
+            color: {theme["text"]} !important;
+            opacity: 1 !important;
         }}
         
         .stRadio [role="radiogroup"] label > div:last-child {{

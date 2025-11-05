@@ -575,11 +575,11 @@ We calculate $\t{ratio}_i = v_i / w_i$ for each subject.
 """)
 
 #FIX EQUATION
-    st.latex(r"x_{paradigms} = \f{\t{Time Remaining}}{\t{Full Time}} = \frac{2}{10} = 0.2")
+    st.latex(r"x_{paradigms} = \fraction{\text{Time Remaining}}{\text{Full Time}} = \frac{2}{10} = 0.2")
 
     st.markdown(r"""
     * **Time Used:** 2 hours.
-    * **Points Gained:** $0.2 \times 30 \t{ points} = 6$.
+    * **Points Gained:** $0.2 \times 30 \text{ points} = 6$.
     * **Time Remaining:** $2 - 2 = 0$ hours.""")
 
     st.markdown("""**Final Result:**

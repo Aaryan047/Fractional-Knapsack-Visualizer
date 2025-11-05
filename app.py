@@ -398,7 +398,7 @@ def apply_custom_css(theme: Dict):
             color: {theme["text"]} !important;
         }}
 
-        [data-testid="stMetricLabel"] > div {{
+        [data-testid="stMetricLabel"] {{
             color: {theme["text"]} !important;
             opacity: 1 !important;
         }}
@@ -410,7 +410,6 @@ def apply_custom_css(theme: Dict):
     </style>
     """
     st.markdown(css, unsafe_allow_html=True)
-
 
 def process_step_1(items: List[KnapsackItem]) -> List[KnapsackItem]:
     """Calculate ratios and sort items"""
@@ -507,7 +506,7 @@ The "greedy" choice is based on the **value-to-weight ratio**, or *value density
     st.latex(r"{ratio}_i = {v_i}/{w_i}")
 
     st.markdown("""**Step 2: Sort by Density**
-Sort all items in **descending order** based on their $\text{ratio}_i$. This places the most "efficient" items first.
+Sort all items in **descending order** based on their $\t{ratio}_i$. This places the most "efficient" items first.
 
 **Step 3: Fill the Knapsack**
 Iterate through the sorted items and add them to the knapsack (let's say `current_weight = 0` and `total_value = 0`):
@@ -544,7 +543,7 @@ You have several topics, each with a potential point gain (value, $v_i$) and the
 ### 4. Applying the Greedy Solution
 
 **Step 1: Calculate Value Density (Points per Hour)**
-We calculate $\text{ratio}_i = v_i / w_i$ for each subject.
+We calculate $\t{ratio}_i = v_i / w_i$ for each subject.
 
 * **Asymptotic Notation:** 12 points / 2 hours = **6 points/hour**
 * **Python:** 20 points / 4 hours = **5 points/hour**
@@ -576,11 +575,11 @@ We calculate $\text{ratio}_i = v_i / w_i$ for each subject.
 """)
 
 #FIX EQUATION
-    st.latex(r"x_{paradigms} = \frac{\text{Time Remaining}}{\text{Full Time}} = \frac{2}{10} = 0.2")
+    st.latex(r"x_{paradigms} = \f{\t{Time Remaining}}{\t{Full Time}} = \frac{2}{10} = 0.2")
 
     st.markdown(r"""
     * **Time Used:** 2 hours.
-    * **Points Gained:** $0.2 \times 30 \text{ points} = 6$.
+    * **Points Gained:** $0.2 \times 30 \t{ points} = 6$.
     * **Time Remaining:** $2 - 2 = 0$ hours.""")
 
     st.markdown("""**Final Result:**

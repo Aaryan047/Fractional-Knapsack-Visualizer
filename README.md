@@ -1,4 +1,4 @@
-# 🎒 Fractional Knapsack Visualizer
+# Fractional Knapsack Visualizer
 
 An interactive **Streamlit app** that brings the *Fractional Knapsack Problem* to life with live charts, custom themes, and step-by-step algorithm tracing.
 
@@ -29,7 +29,7 @@ An interactive **Streamlit app** that brings the *Fractional Knapsack Problem* t
 
 ---
 
-## 🧠 What It Solves
+## What It Solves
 
 The **Fractional Knapsack Problem** is a classic optimization challenge:  
 > “Given a set of items, each with a weight and a value, determine the most valuable combination of items you can carry, where you can take *fractions* of items.”
@@ -38,7 +38,7 @@ This app visually demonstrates how the **greedy approach** sorts by `value/weigh
 
 ---
 
-## 🧩 Tech Stack
+## Tech Stack
 
 - [Streamlit](https://streamlit.io/) for UI and interactivity  
 - [Plotly](https://plotly.com/python/) for visualization  
@@ -47,7 +47,7 @@ This app visually demonstrates how the **greedy approach** sorts by `value/weigh
 
 ---
 
-## ⚙️ Installation
+## Installation
 
 ```bash
 git clone https://github.com/<your-username>/fractional-knapsack-visualizer.git
@@ -63,7 +63,7 @@ pip install .
 
 ---
 
-## ▶️ Run the App
+## Run the App
 
 ```bash
 streamlit run app.py
@@ -77,7 +77,7 @@ http://localhost:5000
 
 ---
 
-## 🔮 Future Enhancements
+## Future Enhancements
 
 * Add **0/1 Knapsack** mode toggle
 * Export results as **PDF or CSV**
@@ -86,7 +86,7 @@ http://localhost:5000
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Aaryan**
 Engineering Student at NSUT
